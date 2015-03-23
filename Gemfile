@@ -8,8 +8,7 @@ gem "sinatra-contrib"
 gem "rake"
 gem "sinatra-activerecord"
 gem "activerecord"
-gem "sqlite3"#, group: :development
-gem "pg" #, group: :production
+gem "pg"
 
 # parsing gems
 gem 'nokogiri'
