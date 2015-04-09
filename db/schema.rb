@@ -11,20 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150315171256) do
+ActiveRecord::Schema.define(version: 20150403062140) do
 
   create_table "devices", force: true do |t|
     t.string "core_id"
-    t.string "model_id"
+    t.string "model"
   end
 
   create_table "readings", force: true do |t|
-    t.integer  "device_id"
-    t.float    "min_spo2"
-    t.float    "mean_spo2"
-    t.float    "mean_hr"
+    t.integer  "session_id"
+    t.float    "spo2"
+    t.float    "hr"
     t.float    "quality"
     t.datetime "published_at"
+  end
+
+  create_table "sessions", force: true do |t|
+    t.integer  "device_id"
+    t.boolean  "active",     default: true
+    t.datetime "started_at"
+    t.datetime "ended_at"
   end
 
 end

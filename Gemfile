@@ -14,3 +14,6 @@ gem "pg"
 gem 'nokogiri'
 gem "chartkick"
 
+# hash generator
+gem 'hashids'
+

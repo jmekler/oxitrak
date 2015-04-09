@@ -1,3 +1,5 @@
-<%= line_chart @published_at.zip(@spo2), library: {vAxis: {title: "SpO2", viewWindow: {max: 100, min: (@spo2.min).div(10)*10}}} %>
-
-<%= line_chart @published_at.zip(@hr), library: {curveType: "function", vAxis: {title: "Heart Rate", viewWindow: {max: (@hr.max.div(10)+1)*10, min: (@hr.min).div(10)*10}}} %>
+<ul>
+  <% @sessions.reverse.each do |s| %>
+    <li><a href="/sessions/<%= encode(s.id) %>"><%= s.started_at %></a></li>
+  <% end %>
+</ul>

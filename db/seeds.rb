@@ -1,0 +1,1 @@
+Device.create(core_id: "54ff6c066678574920460167", model: "Nonin 7500")
