@@ -11,19 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150403062140) do
+ActiveRecord::Schema.define(version: 20150519040733) do
 
   create_table "devices", force: true do |t|
     t.string "core_id"
-    t.string "model"
+    t.string "model_id"
   end
 
   create_table "readings", force: true do |t|
-    t.integer  "session_id"
     t.float    "spo2"
     t.float    "hr"
     t.float    "quality"
     t.datetime "published_at"
+    t.integer  "session_id"
   end
 
   create_table "sessions", force: true do |t|
