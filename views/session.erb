@@ -1,5 +1,51 @@
-<a href="/device/<%= @session.device.core_id %>">Back all readings</a>
+<%
+  bins = {"<85"=>[0, 84.99], "85-90" => [85, 89.99], "90-95" => [90, 94.99], "95-98" => [95, 97.99], "98-100" =>[98,100]}
+  hist = @active.readings.inject({}) do |r,i|
+    bins.each do |k,v| 
+      r[k] = 0 unless r.has_key?(k)      
+      if i.spo2.between?(v[0],v[1])
+        r[k] = r[k] + 1
+        break
+      end
+    end        
+    r 
+  end
+  
+  hist_data = hist.map {|k,v| [k,v.to_f/@active.readings.length]}.reverse
 
-<%= line_chart @readings.map {|r| [r.published_at, r.spo2]}, library: {vAxis: {title: "SpO2", viewWindow: {max: 100, min: 90}}} %>
+%>
 
-<%= line_chart @readings.map {|r| [r.published_at, r.hr]}, library: {curveType: "function", vAxis: {title: "Heart Rate"}} %>
+<a href="/device/<%= @active.device.core_id %>">Back all readings</a>
+
+<h4>Session
+  <small><%= @active.started_at.localtime.strftime("%A %-m/%-d") %></small>
+</h4>
+
+<div class="row">    
+  <div class="col-md-9">
+    <%= line_chart @active.readings.map {|r| [r.published_at, r.spo2]}, height: "200px", library: {colors: ["#3366CC"], lineWidth: 0, explorer: {axis: "horizontal", actions: ['dragToZoom', 'rightClickToReset']}, vAxis: {title: "Oxygen Saturation (SpO2)", viewWindow: { min: 80, max: 100}}, aggregationTarget: "none"} %>
+  </div>
+  <div class="col-md-3">
+    <%= bar_chart hist_data, height: "200px", library: {colors: ["#3366CC"], hAxis: {format: "percent"}} %>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-9">
+    <%= line_chart @active.readings.map {|r| [r.published_at, r.hr]}, height: "200px", library: {colors: ["#CC3366"], lineWidth: 0, explorer: {axis: "horizontal", actions: ['dragToZoom', 'rightClickToReset']}, vAxis: {title: "Heart Rate (bpm)", viewWindow: {min: 40, max: 120}}} %>
+  </div>
+  
+  <div class="col-md-3"></div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h4>Recent sessions</h4>
+    <ul class="nav nav-pills">
+      <% @sessions.each do |s| %>
+        <li role="presentation" <%= (s.id == @active.id) ? "class=""active""" : "" %> ><a class="btn btn-default" href="/sessions/<%= encode(s.id) %>"><%= s.started_at.localtime.strftime("%a %-m/%-d") %></a></li>
+      <% end %>
+    </ul>
+  </div>
+
+</div>
