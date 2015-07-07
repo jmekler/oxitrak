@@ -2,7 +2,7 @@
  * Chartkick.js
  * Create beautiful Javascript charts with minimal code
  * https://github.com/ankane/chartkick.js
- * v1.3.0
+ * v1.2.2
  * MIT License
  */
 
@@ -231,8 +231,6 @@
     var HighchartsAdapter = new function () {
       var Highcharts = window.Highcharts;
 
-      this.name = "highcharts";
-
       var defaultOptions = {
         chart: {},
         xAxis: {
@@ -403,8 +401,6 @@
     var GoogleChartsAdapter = new function () {
       var google = window.google;
 
-      this.name = "google";
-
       var loaded = {};
       var callbacks = [];
 
@@ -560,16 +556,9 @@
         waitForLoaded(function () {
           var options = jsOptions(chart.data, chart.options);
           var data = createDataTable(chart.data, chart.options.discrete ? "string" : "datetime");
-          chart.chart = new google.visualization.ChartWrapper({
-            chartType: "LineChart",
-            dataTable: data,
-            options: options,
-            containerId: chart.element
-          });
-/*           chart.chart = new google.visualization.LineChart(chart.element); */
+          chart.chart = new google.visualization.LineChart(chart.element);
           resize(function () {
-/*             chart.chart.draw(data, options); */
-            chart.chart.draw();
+            chart.chart.draw(data, options);
           });
         });
       };
@@ -695,16 +684,16 @@
     adapters.push(GoogleChartsAdapter);
   }
 
+  // TODO add adapter option
   // TODO remove chartType if cross-browser way
   // to get the name of the chart class
   function renderChart(chartType, chart) {
-    var i, adapter, fnName, adapterName;
+    var i, adapter, fnName;
     fnName = "render" + chartType;
-    adapterName = chart.options.adapter;
 
     for (i = 0; i < adapters.length; i++) {
       adapter = adapters[i];
-      if ((!adapterName || adapterName == adapter.name) && isFunction(adapter[fnName])) {
+      if (isFunction(adapter[fnName])) {
         return adapter[fnName](chart);
       }
     }
