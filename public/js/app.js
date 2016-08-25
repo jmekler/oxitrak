@@ -15,6 +15,6 @@ $(document).ready(function() {
   });  
   
   $("[moment-format='fromNow']").each(function() {
-    $(this).text( moment($(this).attr("utc")).fromNow());
+    $(this).text( moment.utc($(this).attr("utc")).fromNow());
   });  
 });
